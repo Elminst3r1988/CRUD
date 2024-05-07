@@ -19,3 +19,4 @@ logging:
       hibernate:
         SQL: DEBUG
         type: TRACE
+

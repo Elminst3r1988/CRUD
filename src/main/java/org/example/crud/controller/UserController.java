@@ -1,47 +1,28 @@
 package org.example.crud.controller;
 
-import org.example.crud.model.User;
+import org.example.crud.model.UserProfile;
 import org.example.crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class UserController {
 
+    private final UserService userService;
     @Autowired
-    private UserService userService;
-
-    @GetMapping("/users")
-    public String homePage(Model model) {
-        model.addAttribute("listUsers", userService.getAllUsers());
-        return "users";
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/showNewUserForm")
-    public String showNewUserForm(Model model) {
-        User user = new User();
+    @GetMapping("/user/{id}")
+    public String homePage(@PathVariable(value = "id") long id, Model model) {
+        UserProfile user = userService.getUserById(id);
         model.addAttribute("user", user);
-        return "newUser";
+        return "user";
     }
 
-    @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
-        return "redirect:/users";
-    }
 
-    @GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable(value = "id") long id, Model model) {
-        User user = userService.getUserById(id);
-        model.addAttribute("user", user);
-        return "updateUser";
-    }
-
-    @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable(value = "id") long id) {
-        userService.deleteUserById(id);
-        return  "redirect:/users";
-    }
 }

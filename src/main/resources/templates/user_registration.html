@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>Add New User</h1>
+    <hr>
+    <form action="/register/user" method="POST" th:object="${user}">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}" placeholder="User First Name">
+            <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger"></p>
+        </div>
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="User Age">
+            <p th:if="${#fields.hasErrors('age')}" th:errors="*{age}" class="text-danger"></p>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="User Email">
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password">
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
+        </div>
+        <button type="submit" class="btn btn-info">Register</button>
+    </form>
+    <hr>
+</div>
+</body>
+</html>
