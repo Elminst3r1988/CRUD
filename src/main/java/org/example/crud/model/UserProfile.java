@@ -1,9 +1,10 @@
     package org.example.crud.model;
 
+    import com.fasterxml.jackson.annotation.JsonIgnore;
+    import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
     import jakarta.persistence.*;
     import jakarta.validation.constraints.*;
-    import lombok.Getter;
-    import lombok.Setter;
+    import lombok.*;
     import org.springframework.security.core.GrantedAuthority;
     import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +17,9 @@
     @Entity
     @Getter
     @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Table(name = "users")
     public class UserProfile implements UserDetails {
         @Id
@@ -40,7 +44,7 @@
         @Column
         @Size(min = 3, message = "Пароль должен быть минимум из 3-х символов")
         private String password;
-
+        @JsonIgnore
         @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(name = "user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),

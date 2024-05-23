@@ -1,5 +1,6 @@
     package org.example.crud.model;
 
+    import com.fasterxml.jackson.annotation.JsonIgnore;
     import jakarta.persistence.*;
     import lombok.Getter;
     import lombok.Setter;
@@ -18,7 +19,7 @@
         private Long id;
 
         private String name;
-
+        @JsonIgnore
         @ManyToMany(mappedBy = "roles")
         private Set<UserProfile> accounts = new HashSet<>();
 

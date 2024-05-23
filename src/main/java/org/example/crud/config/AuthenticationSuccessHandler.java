@@ -24,13 +24,12 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
         if (isAdmin) {
-            setDefaultTargetUrl("/admin/users");
+            setDefaultTargetUrl("/api/users");
         } else {
             String name = authentication.getName();
             Optional<UserProfile> user = userRepository.findByUsername(name);
             if (user.isPresent()) {
-                UserProfile userProfile = user.get();
-                String redirectUrl = "/user/" + userProfile.getId();
+                String redirectUrl = "/api/users";
                 response.sendRedirect(request.getContextPath() + redirectUrl);
                 return;
             } else {

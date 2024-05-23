@@ -1,22 +1,17 @@
 package org.example.crud.service;
 
+import org.example.crud.dto.UserProfileDTO;
 import org.example.crud.model.UserProfile;
 
 import java.util.List;
 
 public interface UserService {
+    UserProfile createUser(UserProfileDTO userProfileDTO);
+    UserProfile updateUser(UserProfile userProfile);
     List<UserProfile> getAllUsers();
-    void saveUser(UserProfile userProfile);
+    void deleteUser(Long id);
+    UserProfile findByUsername(String username);
 
-    UserProfile getUserById(long id);
-
-    void deleteUserById(long id);
-
-    void updateUser(Long id, UserProfile updatedUser, String[] roleIds);
-
-    boolean isUsernameUnique(String username);
-
-    boolean isEmailUnique(String email);
-
+    UserProfileDTO mapToDTO(UserProfile userProfile);
 
 }

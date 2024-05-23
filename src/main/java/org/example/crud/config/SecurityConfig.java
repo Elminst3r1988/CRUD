@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,12 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     private final UserDetailsService userDetailService;
     private final AuthenticationSuccessHandler successHandler;
 
     @Autowired
-    public SecurityConfig(@Qualifier("userDetailServiceImpl") UserDetailsService userDetailsService, AuthenticationSuccessHandler successHandler) {
+    public SecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userDetailsService, AuthenticationSuccessHandler successHandler) {
         this.userDetailService = userDetailsService;
         this.successHandler = successHandler;
     }
@@ -33,20 +33,12 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/user/**").hasAuthority("ROLE_USER");
-                    registry.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
-                    registry.requestMatchers("/admin/**").permitAll();
-                    registry.requestMatchers("/", "/register/user").permitAll();
+                    registry.requestMatchers("/api/users/**").hasAuthority("ROLE_USER");
                     registry.anyRequest().authenticated();
                 })
                 .formLogin(formLogin -> formLogin.successHandler(successHandler))
                 .build();
 
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return userDetailService;
     }
 
     @Bean
