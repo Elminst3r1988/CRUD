@@ -45,11 +45,16 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .usernameParameter("email")
-                        .successHandler(successHandler)
+                        .successHandler(successHandler) // Убедитесь, что successHandler определен
                         .failureUrl("/login?error=true")
                         .permitAll())
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/login")
+                                .permitAll()
+                )
                 .build();
-
     }
 
     @Bean
