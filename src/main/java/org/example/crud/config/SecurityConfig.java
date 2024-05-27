@@ -13,7 +13,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +25,8 @@ public class SecurityConfig {
     private final AuthenticationSuccessHandler successHandler;
 
     @Autowired
-    public SecurityConfig(@Qualifier("userServiceImpl") UserDetailsService userDetailsService, AuthenticationSuccessHandler successHandler) {
+    public SecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
+                          AuthenticationSuccessHandler successHandler) {
         this.userDetailService = userDetailsService;
         this.successHandler = successHandler;
     }
@@ -34,9 +37,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers("/api/users/**").hasAuthority("ROLE_USER");
+                    registry.requestMatchers("/api").permitAll();
+                    registry.requestMatchers("/api/registration").permitAll();
                     registry.anyRequest().authenticated();
                 })
-                .formLogin(formLogin -> formLogin.successHandler(successHandler))
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("email")
+                        .successHandler(successHandler)
+                        .failureUrl("/login?error=true")
+                        .permitAll())
                 .build();
 
     }

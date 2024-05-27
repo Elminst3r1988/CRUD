@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface UserService {
     UserProfile createUser(UserProfileDTO userProfileDTO);
-    UserProfile updateUser(UserProfile userProfile);
+
+    UserProfile updateUser(UserProfileDTO userProfile);
+
     List<UserProfile> getAllUsers();
+
     void deleteUser(Long id);
+
     UserProfile findByUsername(String username);
 
     UserProfileDTO mapToDTO(UserProfile userProfile);

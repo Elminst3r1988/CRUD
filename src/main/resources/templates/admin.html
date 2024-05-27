@@ -46,6 +46,7 @@
                                     <div class="header-container p-2 bg-light border">
                                         <h2>All users</h2>
                                     </div>
+<!--Вкладка все пользователи-->
                                     <div class="container p-2 m-2">
                                         <table class="table table-striped w-100 px-2">
                                             <thead>
@@ -66,6 +67,7 @@
                                     </div>
                                 </div>
                             </div>
+<!--Вкладка новыый пользователь-->
                             <div class="tab-pane f  ade" id="newUserTab">
                                 <div class="border bg-white">
                                     <div class="header-container p-2 bg-light border">
@@ -151,36 +153,36 @@
                     </div>
                     <div class="form-group">
                         <label for="editUserName">Name:</label>
-                        <input type="text" class="form-control" id="editUserName">
+                        <input type="text" class="form-control" id="editUserName" name="editUserName">
                     </div>
                     <div class="form-group">
                         <label for="editUserAge">Age:</label>
-                        <input type="text" class="form-control" id="editUserAge">
+                        <input type="text" class="form-control" id="editUserAge" name="editUserAge">
                     </div>
                     <div class="form-group">
                         <label for="editUserEmail">Email:</label>
-                        <input type="email" class="form-control" id="editUserEmail">
+                        <input type="email" class="form-control" id="editUserEmail" name="editUserEmail">
                     </div>
                     <div class="form-group">
                         <label for="editUserPassword">Password:</label>
-                        <input type="password" class="form-control" id="editUserPassword">
+                        <input type="password" class="form-control" id="editUserPassword" name="editUserPassword">
                     </div>
                     <div class="form-group">
                         <label for="editUserRole">Role:</label><br>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="editUserAdminRole" value="ADMIN">
+                            <input class="form-check-input" type="checkbox" id="editUserAdminRole" value="ROLE_ADMIN" name="editUserRoles">
                             <label class="form-check-label" for="editUserAdminRole">Admin</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="editUserUserRole" value="USER">
+                            <input class="form-check-input" type="checkbox" id="editUserUserRole" value="ROLE_USER" name="editUserRoles">
                             <label class="form-check-label" for="editUserUserRole">User</label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="saveEditUser">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -247,7 +249,11 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
 
+
+
+<!-- Получение данных текущего пользователя -->
 <script>
     $(document).ready(function() {
         $.ajax({
@@ -282,9 +288,9 @@
         });
     });
 </script>
-
+<!-- УНИВЕРСАЛЬНАЯ ФУНКЦИЯ получение всех пользователей из БД для Users table -->
 <script>
-    $(document).ready(function() {
+    function refreshUserTable() {
         $.ajax({
             url: '/api/users/all',
             method: 'GET',
@@ -306,7 +312,6 @@
                 `;
                 });
                 $('#usersTableBody').html(userRows);
-
 
                 $('.btn-edit').click(function() {
                     const userId = $(this).data('id');
@@ -337,74 +342,234 @@
                 console.error('Error fetching all users:', error);
             }
         });
+    }
+
+    $(document).ready(function() {
+        refreshUserTable();
     });
 </script>
-
+<!-- Создание нового пользователя -->
 <script>
     $(document).ready(function () {
+        $("#createUser").validate({
+            rules: {
+                name: {
+                    required: true,
+                    minlength: 3
+                },
+                age: {
+                    required: true,
+                    digits: true,
+                    min: 18
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                },
+                role: {
+                    required: true
+                }
+            },
+            messages: {
+                name: {
+                    required: "Please enter the user's name.",
+                    minlength: "Minimal length - 3 symbols"
+                },
+                age: {
+                    required: "Please enter the user's age.",
+                    digits: "Please enter a valid age (numeric value).",
+                    min: "Minimal age - 18"
+                },
+                email: {
+                    required: "Please enter the user's email address.",
+                    email: "Please enter a valid email address."
+                },
+                password: {
+                    required: "Please enter the user's password.",
+                    minlength: "Password must be at least 6 characters long."
+                },
+                role: {
+                    required: "Please select at least one role."
+                }
+            },
+            errorPlacement: function (error, element) {
+
+                error.insertAfter(element).css('color', 'red');
+            }
+        });
+
         $("#createUser").on("submit", function (event) {
             event.preventDefault();
 
-            const data = {
-                username: $("#name").val(),
-                age: $("#age").val(),
-                email: $("#email").val(),
-                password: $("#password").val(),
-                roles: []
-            };
+            if ($("#createUser").valid()) {
+                const data = {
+                    username: $("#name").val(),
+                    age: $("#age").val(),
+                    email: $("#email").val(),
+                    password: $("#password").val(),
+                    roles: []
+                };
 
-            if ($('#adminRole').is(':checked')) {
-                data.roles.push('ROLE_ADMIN');
+                if ($('#adminRole').is(':checked')) {
+                    data.roles.push('ROLE_ADMIN');
+                }
+                if ($('#userRole').is(':checked')) {
+                    data.roles.push('ROLE_USER');
+                }
+
+                $.ajax({
+                    url: "/api/users/create",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        alert("User created successfully!");
+                        refreshUserTable();
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 400) {
+                            const errorMessage = xhr.responseText;
+                            if (errorMessage.includes("Name already exists")) {
+                                $("#name").after('<div class="error-message text-danger">Name already exists</div>');
+                            }
+                            if (errorMessage.includes("Email already exists")) {
+                                $("#email").after('<div class="error-message text-danger" >Email already exists</div>');
+                            }
+                        } else {
+                            console.error("Error creating user:", xhr);
+                        }
+                    },
+                });
             }
-            if ($('#userRole').is(':checked')) {
-                data.roles.push('ROLE_USER');
-            }
+        });
+    });
+</script>
+<!-- Удаление пользователя -->
+<script>
+    $(document).ready(function () {
+        // Обработчик кнопки "Delete" в модальном окне
+        $("#confirmDeleteUser").click(function () {
+            const userId = $("#deleteUserID").val();
 
             $.ajax({
-                url: "/api/users/create",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(data),
+                url: `/api/users/delete/${userId}`,
+                type: "DELETE",
                 success: function (response) {
-                    console.log("User created successfully!");
+                    $('#deleteUserModal').modal('hide');
                     refreshUserTable();
                 },
                 error: function (error) {
-                    console.error("Error creating user:", error);
-                },
-            });
-        });
-
-        function refreshUserTable() {
-            $.ajax({
-                url: '/api/users/all',
-                method: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    let userRows = '';
-                    data.forEach(function (elem, ind) {
-                        const roles = elem.authorities.map(auth => auth.authority);
-                        userRows += `
-                            <tr>
-                                <td>${elem.id}</td>
-                                <td>${elem.username}</td>
-                                <td>${elem.age}</td>
-                                <td>${elem.email}</td>
-                                <td>${roles.join(", ")}</td>
-                                <td><button class="btn btn-primary btn-edit" data-id="${elem.id}" data-toggle="modal" data-target="#editUserModal">Edit</button></td>
-                                <td><button class="btn btn-danger btn-delete" data-id="${elem.id}" data-toggle="modal" data-target="#deleteUserModal">Delete</button></td>
-                            </tr>
-                        `;
-                    });
-                    $('#usersTableBody').html(userRows);
-                },
-                error: function (error) {
-                    console.error('Error fetching all users:', error);
+                    alert("Something went wrong");
+                    console.error('Error deleting user:', error);
                 }
             });
-        }
+        });
     });
 </script>
+<!-- Обновление пользователя -->
+<script>
+    $(document).ready(function () {
+        $("#editUserForm").validate({
+            rules: {
+                editUserName: {
+                    required: true,
+                    minlength: 3
+                },
+                editUserAge: {
+                    required: true,
+                    digits: true,
+                    min: 18
+                },
+                editUserEmail: {
+                    required: true,
+                    email: true
+                },
+                editUserPassword: {
+                    required: true,
+                    minlength: 6
+                }
+            },
+            messages: {
+                editUserName: {
+                    required: "Please enter the user's name.",
+                    minlength: "Minimal length - 3 symbols"
+                },
+                editUserAge: {
+                    required: "Please enter the user's age.",
+                    digits: "Please enter a valid age (numeric value).",
+                    min: "Minimal age - 18"
+                },
+                editUserEmail: {
+                    required: "Please enter the user's email address.",
+                    email: "Please enter a valid email address."
+                },
+                editUserPassword: {
+                    required: "Please enter the user's password.",
+                    minlength: "Password must be at least 6 characters long."
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element).css('color', 'red');
+            }
+        });
+
+        $("#saveEditUser").click(function () {
+            $('.error-message').remove();
+
+            if ($("#editUserForm").valid()) {
+                const updateUserId = $("#editUserID").val();
+                const data = {
+                    id: updateUserId,
+                    username: $("#editUserName").val(),
+                    age: $("#editUserAge").val(),
+                    email: $("#editUserEmail").val(),
+                    password: $("#editUserPassword").val(),
+                    roles: []
+                };
+
+                if ($('#editUserAdminRole').is(':checked')) {
+                    data.roles.push('ROLE_ADMIN');
+                }
+                if ($('#editUserUserRole').is(':checked')) {
+                    data.roles.push('ROLE_USER');
+                }
+
+                console.log("Roles: " + data.roles);
+
+                $.ajax({
+                    url: `/api/users/update/${updateUserId}`,
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        $('#editUserModal').modal('hide');
+                        refreshUserTable();
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 400) {
+                            const errorMessage = xhr.responseText;
+                            if (errorMessage.includes("Name already exists")) {
+                                $("#editUserName").after('<div class="error-message text-danger">Name already exists</div>');
+                            }
+                            if (errorMessage.includes("Email already exists")) {
+                                $("#editUserEmail").after('<div class="error-message text-danger">Email already exists</div>');
+                            }
+                        } else if (xhr.status === 404) {
+                            alert("User not found");
+                        } else {
+                            console.error("Error updating user:", xhr);
+                        }
+                    },
+                });
+            }
+        });
+    });
+</script>
+
 
 </body>
 </html>

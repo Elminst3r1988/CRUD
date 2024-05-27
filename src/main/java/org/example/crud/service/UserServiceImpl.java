@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.stream;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userProfileRepository;
@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -39,17 +41,36 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .username(userProfileDTO.getUsername())
                 .age(userProfileDTO.getAge())
                 .email(userProfileDTO.getEmail())
-                .password(userProfileDTO.getPassword())
+                .password(passwordEncoder.encode(userProfileDTO.getPassword()))
                 .roles(userProfileDTO.getRoles().stream()
                         .map(roleName -> roleRepository.findByName(roleName)
                                 .orElseThrow(() -> new RuntimeException("Role not found")))
                         .collect(Collectors.toSet()))
                 .build());
     }
+
     @Override
     @Transactional
-    public UserProfile updateUser(UserProfile userProfile) {
-        return userProfileRepository.save(userProfile);
+    public UserProfile updateUser(UserProfileDTO userProfile) {
+        UserProfile existingUser = userProfileRepository.findById(userProfile.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Set<Role> roles = new HashSet<>();
+        for (String role : userProfile.getRoles()) {
+            Optional<Role> roleOptional = roleRepository.findByName(role);
+            roleOptional.ifPresent(roles::add);
+        }
+        UserProfile updatedUser = new UserProfile();
+        updatedUser.setId(userProfile.getId());
+        updatedUser.setUsername(userProfile.getUsername());
+        updatedUser.setAge(userProfile.getAge());
+        updatedUser.setEmail(userProfile.getEmail());
+        if (!userProfile.getPassword().equals(existingUser.getPassword())) {
+            updatedUser.setPassword(passwordEncoder.encode(userProfile.getPassword()));
+        } else {
+            updatedUser.setPassword(userProfile.getPassword());
+        }
+        updatedUser.setRoles(roles);
+        return userProfileRepository.save(updatedUser);
     }
 
     @Override
@@ -73,6 +94,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+
     public UserProfileDTO mapToDTO(UserProfile userProfile) {
         UserProfileDTO userProfileDTO = new UserProfileDTO();
         userProfileDTO.setId(userProfile.getId());
@@ -85,10 +107,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .collect(Collectors.toSet()));
         return userProfileDTO;
     }
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userProfileRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+
 }
 
