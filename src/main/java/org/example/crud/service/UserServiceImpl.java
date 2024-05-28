@@ -6,10 +6,6 @@ import org.example.crud.model.UserProfile;
 import org.example.crud.repository.RoleRepository;
 import org.example.crud.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -109,4 +104,3 @@ public class UserServiceImpl implements UserService {
     }
 
 }
-

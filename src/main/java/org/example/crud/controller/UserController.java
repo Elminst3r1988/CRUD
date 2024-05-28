@@ -74,7 +74,6 @@ public class UserController {
     }
 
 
-
     @GetMapping("/all")
     public ResponseEntity<List<UserProfile>> getAllUsers() {
         List<UserProfile> users = userService.getAllUsers();
