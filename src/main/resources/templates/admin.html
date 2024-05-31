@@ -25,6 +25,9 @@
                 <li class="nav-item" id="userTab">
                     <a class="nav-link" data-toggle="tab" href="#userinfo">User</a>
                 </li>
+                <li class="nav-item" id="tradeTab">
+                    <a class="nav-link" data-toggle="tab" href="#trade">Trade</a>
+                </li>
             </ul>
         </div>
         <div class="col-md-10 bg-light" style="min-height: 100vh;">
@@ -103,6 +106,56 @@
                             </div>
                         </div>
                     </div>
+<!--Вкладка Trade-->
+                    <div class="tab-pane fade" id="trade">
+                        <h1>Trade panel</h1>
+                        <div class="border bg-white">
+                            <div class="header-container p-2 bg-light border">
+                                <h3>Exchange calculator</h3>
+                            </div>
+                            <div class="container p-2">
+                                <form id="tradeForm">
+                                    <!-- Раздел первого списка -->
+                                    <div class="form-group row">
+                                        <div class="col-sm-4">
+                                            <select class="form-control" id="firstCurrency"></select>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="button" id="calculateButton" class="btn btn-primary">Calculate</button>
+                                        </div>
+                                    </div>
+                                    <!-- Раздел второго списка -->
+                                    <div class="form-group row mt-3">
+                                        <div class="col-sm-4">
+                                            <select class="form-control" id="secondCurrency"></select>
+                                        </div>
+                                    </div>
+                                    <!-- Таблица с сайтами и выгодой -->
+                                    <div class="form-group row mt-3">
+                                        <div class="col-12">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">Site 1</th>
+                                                    <th scope="col">Site 2</th>
+                                                    <th scope="col">Value 1</th>
+                                                    <th scope="col">Value 2</th>
+                                                    <th scope="col">Difference, %</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="ratesTableBody">
+                                                <!-- Таблица, которую нужно заполнить -->
+                                                </tbody>
+                                            </table>
+                                            <div id="result"></div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Вкладка UserInfo-->
                     <div class="tab-pane fade" id="userinfo">
                         <h1>User information page</h1>
                         <div class="border bg-white">
@@ -117,13 +170,10 @@
                                         <th scope="col">Name</th>
                                         <th scope="col">Age</th>
                                         <th scope="col">Email</th>
-                                        <th scope="col">Password</th>
                                         <th scope="col">Role</th>
                                     </tr>
                                     </thead>
                                     <tbody id="userInfoBody">
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -276,7 +326,6 @@
                     <td>${data.username}</td>
                     <td>${data.age}</td>
                     <td>${data.email}</td>
-                    <td>${data.password}</td>
                     <td>${data.roles.join(', ')}</td>
                 </tr>
             `;
@@ -538,7 +587,7 @@
                     data.roles.push('ROLE_USER');
                 }
 
-                console.log("Roles: " + data.roles);
+                alert(JSON.stringify(data));
 
                 $.ajax({
                     url: `/api/users/update/${updateUserId}`,
@@ -569,6 +618,59 @@
         });
     });
 </script>
+<!--Скрипт размещения вариантов валют в выпажающем списке-->
+<script>
+    $(document).ready(function() {
+        $.getJSON("/api/trade/currencies", function(data) {
+            var options = '';
+            $.each(data, function(key, value) {
+                options += '<option value="' + value + '">' + value + '</option>';
+            });
+            $('#firstCurrency').append(options);
+            $('#secondCurrency').append(options);
+        });
+
+        $('#calculateButton').on('click', function() {
+            var selectedFirstCurrency = $('#firstCurrency').val();
+            var selectedSecondCurrency = $('#secondCurrency').val();
+
+            $.ajax({
+                url: '/api/trade/calculate',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    firstCurrency: selectedFirstCurrency,
+                    secondCurrency: selectedSecondCurrency
+                }),
+                success: function(response) {
+                    console.log('Server response:', response);
+                    populateTable(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error sending data:', textStatus, errorThrown);
+                }
+            });
+        });
+
+        function populateTable(data) {
+            var tableBody = $('#ratesTableBody');
+            tableBody.empty();
+            var userRows = '';
+            data.forEach(function(elem) {
+                userRows += `
+                    <tr>
+                        <td>${elem.firstSiteName}</td>
+                        <td>${elem.secondSiteName}</td>
+                        <td>${elem.firstValue}</td>
+                        <td>${elem.secondValue}</td>
+                        <td>${elem.differencePercent.toFixed(3)}</td>
+                    </tr>`;
+            });
+            tableBody.append(userRows);
+        }
+    });
+</script>
+
 
 
 </body>

@@ -19,4 +19,6 @@ public class UserProfileDTO {
     @Size(min = 3, message = "Пароль должен быть минимум из 3-х символов")
     private String password;
     private Set<String> roles;
+
+
 }

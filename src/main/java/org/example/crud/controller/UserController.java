@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @GetMapping
     public ModelAndView homePage() {
@@ -67,9 +70,7 @@ public class UserController {
             return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
         }
 
-        existingUser.setUsername(userProfileDTO.getUsername());
-        existingUser.setEmail(userProfileDTO.getEmail());
-        userRepository.save(existingUser);
+        userService.updateUser(userProfileDTO);
         return new ResponseEntity<>(existingUser, HttpStatus.OK);
     }
 

@@ -13,10 +13,27 @@ spring:
         hbm2ddl:
           auto: update
         show_sql: true
+
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
         type: TRACE
+
+property:
+  names:
+    - USD
+    - EUR
+    - RUB
+    - CNY
+  urls:
+    currate: https://currate.ru/api/?get=rates&pairs=
+    currencyapi: https://api.currencyapi.com/v3/latest?
+    openexchange: https://openexchangerates.org/api/latest.json?base=
+
+
+
+
+
 
