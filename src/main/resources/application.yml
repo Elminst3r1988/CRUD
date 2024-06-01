@@ -31,6 +31,9 @@ property:
     currate: https://currate.ru/api/?get=rates&pairs=
     currencyapi: https://api.currencyapi.com/v3/latest?
     openexchange: https://openexchangerates.org/api/latest.json?base=
+openexchangerates:
+  org: ${openexchangerates.org}
+
 
 
 

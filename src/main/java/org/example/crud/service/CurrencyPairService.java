@@ -2,10 +2,12 @@ package org.example.crud.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.crud.client.exchangerateapi.OpenExchangeRatesApiClient;
 import org.example.crud.dto.UnifiedDTO;
 import org.example.crud.dto.currencyapi.CurrencyApiDTO;
 import org.example.crud.dto.openexchangerates.OpenExchangeRatesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.example.crud.dto.currate.CurrateApiDTO;
@@ -24,6 +26,10 @@ public class CurrencyPairService {
     private RestTemplate restTemplate;
     @Autowired
     PropertyConfig propertyConfig;
+    @Autowired
+    private OpenExchangeRatesApiClient openExchangeRatesApiClient;
+    @Value("${openexchangerates.org}")
+    private String openExchangeKey;
 
 
     public UnifiedDTO getRatesFromCurrate(String firstCurrency, String secondCurrency) throws JsonProcessingException {
@@ -56,8 +62,13 @@ public class CurrencyPairService {
     public UnifiedDTO getRatesFromCurrencyApi(String firstCurrency, String secondCurrency)
             throws JsonProcessingException {
         String apikey = System.getenv("app.currencyapi.com");
-        String url = propertyConfig.getUrls().get("currencyapi") + "base_currency=" + firstCurrency +
-                "&currencies[]=" + secondCurrency + "&apikey=" + apikey;
+        String url = propertyConfig.getUrls().get("currencyapi")
+                + "base_currency="
+                + firstCurrency
+                + "&currencies[]="
+                + secondCurrency
+                + "&apikey="
+                + apikey;
 
         String jsonResponse = restTemplate.getForObject(url, String.class);
 
@@ -72,22 +83,39 @@ public class CurrencyPairService {
         return unifiedDTO;
     }
 
-    public UnifiedDTO getRatesFromOpenExchangeRate(String firstCurrency, String secondCurrency) throws JsonProcessingException {
-        String apikey = System.getenv("openexchangerates.org");
-        String url = propertyConfig.getUrls().get("openexchange")
-                + firstCurrency + "&symbols=" + secondCurrency + "&app_id=" + apikey;
+    public OpenExchangeRatesDTO getExchangeRates(String base, String symbols) {
+        return openExchangeRatesApiClient.getData(base, symbols, openExchangeKey);
+    }
 
-        String jsonResponse = restTemplate.getForObject(url, String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        OpenExchangeRatesDTO openExchangeRatesDTO = objectMapper.readValue(jsonResponse, OpenExchangeRatesDTO.class);
+    public UnifiedDTO getRatesFromOpenExchangeRate(String firstCurrency, String secondCurrency) {
         UnifiedDTO unifiedDTO = new UnifiedDTO();
         unifiedDTO.setSiteName("openexchange");
-        openExchangeRatesDTO.getRates().forEach((key, value) -> {
+        getExchangeRates(firstCurrency, secondCurrency).getRates().forEach((key, value) -> {
             unifiedDTO.setValue(parseDouble(value));
         });
         return unifiedDTO;
+
+
+
+//        String url = propertyConfig.getUrls().get("openexchange")
+//                + firstCurrency
+//                + "&symbols="
+//                + secondCurrency
+//                + "&app_id="
+//                + openExchangeKey;
+//
+//        String jsonResponse = restTemplate.getForObject(url, String.class);
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        OpenExchangeRatesDTO openExchangeRatesDTO = objectMapper.readValue(jsonResponse, OpenExchangeRatesDTO.class);
+//
+//        UnifiedDTO unifiedDTO = new UnifiedDTO();
+//        unifiedDTO.setSiteName("openexchange");
+//        openExchangeRatesDTO.getRates().forEach((key, value) -> {
+//            unifiedDTO.setValue(parseDouble(value));
+//        });
+//        return unifiedDTO;
     }
 }
 

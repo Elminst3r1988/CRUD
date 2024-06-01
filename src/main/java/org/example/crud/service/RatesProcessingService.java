@@ -29,7 +29,7 @@ public class RatesProcessingService {
                     rateProcessDTO.setFirstValue(unifiedDTOS.get(i).getValue());
                     rateProcessDTO.setSecondSiteName(unifiedDTOS.get(j).getSiteName());
                     rateProcessDTO.setSecondValue(unifiedDTOS.get(j).getValue());
-                    double differencePercent = (rateProcessDTO.getSecondValue() - rateProcessDTO.getFirstValue()) * 100;
+                    double differencePercent = (rateProcessDTO.getFirstValue() - rateProcessDTO.getSecondValue()) * 100;
                     differencePercent = Math.round(differencePercent * 1000.0) / 1000.0;
                     rateProcessDTO.setDifferencePercent(differencePercent);
                     rateProcessDTOS.add(rateProcessDTO);
