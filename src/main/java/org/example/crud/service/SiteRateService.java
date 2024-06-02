@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface SiteRateService {
-    UnifiedDTO getData(String sieName, String secondCurrency) throws JsonProcessingException;
+    UnifiedDTO getData(String firstCurrency, String secondCurrency) throws JsonProcessingException;
 }
