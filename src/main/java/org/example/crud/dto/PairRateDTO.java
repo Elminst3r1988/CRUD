@@ -4,9 +4,6 @@ import lombok.Data;
 
 @Data
 public class PairRateDTO {
-    private String firstSiteName;
-    private String secondSiteName;
-    private double firstValue;
-    private double secondValue;
-    private double differencePercent;
+    private String siteName;
+    private double value;
 }

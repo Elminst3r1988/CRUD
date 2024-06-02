@@ -1,7 +1,7 @@
 package org.example.crud.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.crud.dto.PairRateDTO;
+import org.example.crud.dto.CompareRateDTO;
 import org.example.crud.properties.PropertyConfig;
 import org.example.crud.service.RatesProcessingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class CurrencyPairController {
     public ResponseEntity<?> calculate(@RequestBody Map<String, String> request) throws JsonProcessingException {
         String firstCurrency = request.get("firstCurrency");
         String secondCurrency = request.get("secondCurrency");
-        List<PairRateDTO> rates = ratesProcessingService.getRangedRates(firstCurrency, secondCurrency);
+        List<CompareRateDTO> rates = ratesProcessingService.getRangedRates(firstCurrency, secondCurrency);
         return ResponseEntity.ok(rates);
     }
 }
