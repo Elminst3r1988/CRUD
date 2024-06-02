@@ -19,7 +19,7 @@ public class CurrateService implements CurrencyClientService {
     @Autowired
     private PropertyConfig propertyConfig;
 
-    public CurrateApiDTO getRatesFromCurrate(String firstCurrency, String secondCurrency) throws JsonProcessingException {
+    public CurrateApiDTO getRatesFromCurrate(String firstCurrency, String secondCurrency) {
         String apiKey = System.getenv("currate.ru");
         String url = propertyConfig.getUrls().get("currate")
                 + firstCurrency
@@ -30,13 +30,20 @@ public class CurrateService implements CurrencyClientService {
         String jsonResponse = restTemplate.getForObject(url, String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
+        CurrateApiDTO currateApiDTO = null;
 
-        return objectMapper.readValue(jsonResponse, CurrateApiDTO.class);
+        try {
+            currateApiDTO = objectMapper.readValue(jsonResponse, CurrateApiDTO.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Ошибка при обработке JSON ответа от Currate API", e);
+        }
+
+        return currateApiDTO;
     }
 
 
     @Override
-    public PairRateDTO getData(String firstCurrency, String secondCurrency) throws JsonProcessingException {
+    public PairRateDTO getData(String firstCurrency, String secondCurrency) {
         PairRateDTO pairRateDTO = new PairRateDTO();
         pairRateDTO.setSiteName("currate");
 

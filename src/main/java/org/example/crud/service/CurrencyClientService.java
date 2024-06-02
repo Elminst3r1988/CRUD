@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CurrencyClientService {
-    PairRateDTO getData(String firstCurrency, String secondCurrency) throws JsonProcessingException;
+    PairRateDTO getData(String firstCurrency, String secondCurrency);
 }
