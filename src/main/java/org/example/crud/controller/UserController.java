@@ -3,7 +3,7 @@ package org.example.crud.controller;
 import org.example.crud.dto.UserProfileDTO;
 import org.example.crud.model.UserProfile;
 import org.example.crud.repository.UserRepository;
-import org.example.crud.service.UserService;
+import org.example.crud.service.userinfo.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

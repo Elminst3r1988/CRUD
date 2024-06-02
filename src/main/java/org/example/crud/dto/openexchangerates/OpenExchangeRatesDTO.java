@@ -12,11 +12,4 @@ import java.util.Optional;
 public class OpenExchangeRatesDTO {
     @JsonProperty("rates")
     private Map<String, String> rates;
-
-    public Optional<String> getRateKey() {
-        return rates.keySet().stream().findFirst();
-    }
-    public Optional<String> getRateValue() {
-        return rates.values().stream().findFirst();
-    }
 }

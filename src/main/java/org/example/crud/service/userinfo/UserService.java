@@ -1,4 +1,4 @@
-package org.example.crud.service;
+package org.example.crud.service.userinfo;
 
 import org.example.crud.dto.UserProfileDTO;
 import org.example.crud.model.UserProfile;

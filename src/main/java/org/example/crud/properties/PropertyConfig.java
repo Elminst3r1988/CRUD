@@ -15,4 +15,6 @@ import java.util.Map;
 public class PropertyConfig {
     private List<String> names;
     private Map<String, String> urls;
+    private String openExchangeApiKey;
+    private String currencyApiKey;
 }
