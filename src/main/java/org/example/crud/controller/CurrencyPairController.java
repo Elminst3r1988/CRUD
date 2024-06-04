@@ -29,6 +29,8 @@ public class CurrencyPairController {
     public ResponseEntity<?> calculate(@RequestBody Map<String, String> request) throws JsonProcessingException {
         String firstCurrency = request.get("firstCurrency");
         String secondCurrency = request.get("secondCurrency");
+        String test = propertyConfig.getCurrateApiKey();
+        System.out.println("ВОТ КЛЮЧ: " + test);
         List<CompareRateDTO> rates = ratesProcessingService.getRangedRates(firstCurrency, secondCurrency);
         return ResponseEntity.ok(rates);
     }

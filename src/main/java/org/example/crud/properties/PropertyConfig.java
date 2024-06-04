@@ -17,4 +17,6 @@ public class PropertyConfig {
     private Map<String, String> urls;
     private String openExchangeApiKey;
     private String currencyApiKey;
+    private String currateApiKey;
+
 }
