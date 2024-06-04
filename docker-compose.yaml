@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   crud-app:
-    build: .
+    image: elminst3r/crud-app:latest
     ports:
-      - "8080:8080"
+      - "8888:8080"
     depends_on:
       - postgres
     environment:
@@ -22,4 +22,5 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5555:5432"
+

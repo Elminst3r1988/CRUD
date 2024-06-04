@@ -4,7 +4,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://postgres:5432/Test
+    url: jdbc:postgresql://postgres:5432/
     username: ${POSTGRES_USER}
   jpa:
     properties:
@@ -32,6 +32,8 @@ property:
   openExchangeApiKey: ${OPEN_EXCHANGE_API_KEY}
   currencyApiKey: ${CURRENCY_API_KEY}
   currateApiKey: ${CURRATE_API_KEY}
+  adminPass: ${ADMIN_PASS}
+
 
 
 

@@ -18,5 +18,6 @@ public class PropertyConfig {
     private String openExchangeApiKey;
     private String currencyApiKey;
     private String currateApiKey;
+    private String adminPass;
 
 }

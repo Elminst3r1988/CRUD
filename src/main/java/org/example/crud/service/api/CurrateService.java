@@ -27,7 +27,6 @@ public class CurrateService implements CurrencyClientService {
                 + "&key="
                 + apiKey;
 
-        System.out.println(apiKey);
 
         String jsonResponse = restTemplate.getForObject(url, String.class);
 
