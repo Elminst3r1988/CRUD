@@ -37,7 +37,9 @@ public class RatesProcessingService {
                     differencePercent = Math.round(differencePercent * 1000.0) / 1000.0;
 
                     compareRateDTO.setDifferencePercent(differencePercent);
-                    compareRateDTOS.add(compareRateDTO);
+                    if (differencePercent > 0) {
+                        compareRateDTOS.add(compareRateDTO);
+                    }
                 }
             }
         }

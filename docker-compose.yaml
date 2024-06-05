@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   crud-app:
-    image: elminst3r/crud-app:latest
+    build: .
     ports:
       - "8888:8080"
     depends_on:
@@ -21,6 +21,9 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=Test
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
     ports:
       - "5555:5432"
 
