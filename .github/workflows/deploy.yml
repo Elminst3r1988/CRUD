@@ -24,7 +24,7 @@ jobs:
         run: echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t elminst3r/crud-app:latest .
+        run: docker build -t elminst3r/crud-app:latest . --file F:\Java\CRUD\Dockerfile
 
       - name: Push Docker image to Docker Hub
         run: docker push elminst3r/crud-app:latest
