@@ -21,7 +21,8 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Docker image
-        run: docker build -t elminst3r/crud-app:latest .
+        run: docker build --no-cache -t elminst3r/crud-app:latest .
+
         env:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
