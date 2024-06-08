@@ -11,6 +11,10 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/Test
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - ADMIN_PASS=${ADMIN_PASS}
+      - CURRATE_API_KEY=${CURRATE_API_KEY}
+      - CURRENCY_API_KEY=${CURRENCY_API_KEY}
+      - OPEN_EXCHANGE_API_KEY=${OPEN_EXCHANGE_API_KEY}
 
   postgres:
     image: postgres:latest
