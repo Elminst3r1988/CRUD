@@ -34,4 +34,3 @@ jobs:
           source: "docker-compose.yaml"
           target: "/home/${{ secrets.SSH_USER }}"
           overwrite: true
-
