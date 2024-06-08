@@ -29,7 +29,6 @@ jobs:
         with:
           host: overridetech.ru
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           source: "docker-compose.yaml"
           target: "/home/${{ secrets.SSH_USER }}"
