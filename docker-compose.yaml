@@ -21,4 +21,3 @@ services:
       - POSTGRES_DB=Test
     ports:
       - "5555:5432"
-
