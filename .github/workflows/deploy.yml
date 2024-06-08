@@ -50,5 +50,5 @@ jobs:
             sudo docker-compose down
             docker rmi elminst3r/crud-app:latest
             sudo docker pull elminst3r/crud-app:latest
-            docker-compose up --force-recreate
+            sudo docker-compose up --force-recreate
             
