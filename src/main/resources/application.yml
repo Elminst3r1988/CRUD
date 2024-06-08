@@ -29,10 +29,10 @@ property:
     - CNY
   urls:
     currate: https://currate.ru/api/?get=rates&pairs=
-  openExchangeApiKey: ${OPEN_EXCHANGE_API_KEY}
-  currencyApiKey: ${CURRENCY_API_KEY}
-  currateApiKey: ${CURRATE_API_KEY}
-  adminPass: ${ADMIN_PASS}
+  openExchangeApiKey: ${{OPEN_EXCHANGE_API_KEY}}
+  currencyApiKey: ${{CURRENCY_API_KEY}}
+  currateApiKey: ${{CURRATE_API_KEY}}
+  adminPass: ${{ADMIN_PASS}}
 
 
 
