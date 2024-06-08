@@ -6,6 +6,6 @@ COPY pom.xml .
 
 COPY src ./src
 
-RUN mvn package
+RUN mvn clean package
 
 ENTRYPOINT ["java", "-jar", "target/CRUD-0.0.1-SNAPSHOT.jar"]
