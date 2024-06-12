@@ -1,7 +1,7 @@
 spring:
   liquibase:
+    change-log: db/changelog/changelog.xml
     enabled: true
-    change-log: classpath:/db/changelog/changelog.xml
   application:
     name: CRUD
   datasource:
