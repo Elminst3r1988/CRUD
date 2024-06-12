@@ -23,6 +23,9 @@
             <column name="username" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="lastname" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
             <column name="age" type="SMALLINT">
                 <constraints nullable="false"/>
             </column>
