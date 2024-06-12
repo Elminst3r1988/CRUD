@@ -30,6 +30,11 @@ public class UserProfile implements UserDetails {
     @Size(min = 3, max = 50, message = "Имя должно содержать от 3 до 50 симовлов")
     private String username;
 
+    @Column(name = "Lastname")
+    @NotBlank(message = "Поле должно быть заполнено")
+    @Size(min = 3, max = 50, message = "Имя должно содержать от 3 до 50 симовлов")
+    private String lastname;
+
     @Column(name = "Age")
     @NotNull(message = "Поле должно быть заполнено")
     @Min(value = 18, message = "Возраст должен быть не меньше 18")

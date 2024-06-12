@@ -12,6 +12,8 @@ public class UserProfileDTO {
     @Size(min = 3, max = 50, message = "Имя должно содержать от 3 до 50 симовлов")
     private String username;
     @NotNull(message = "Поле должно быть заполнено")
+    private String lastname;
+    @NotNull(message = "Поле должно быть заполнено")
     @Min(value = 18, message = "Возраст должен быть не меньше 18")
     private Short age;
     @NotBlank(message = "Поле должно быть заполнено")
