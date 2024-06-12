@@ -34,7 +34,7 @@ public class DataBaseInitService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
 
         if (roleRepository.count() == 0) {
