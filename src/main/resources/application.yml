@@ -6,9 +6,9 @@ spring:
     name: CRUD
   datasource:
     driver-class-name: org.postgresql.Driver
-    password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://postgres:5432/Test
-    username: ${POSTGRES_USER}
+    password: 123456
+    url: jdbc:postgresql://postgres-service:5432/Test
+    username: postgres
   jpa:
     properties:
       hibernate:
@@ -36,12 +36,3 @@ property:
   currencyApiKey: ${CURRENCY_API_KEY}
   currateApiKey: ${CURRATE_API_KEY}
   adminPass: ${ADMIN_PASS}
-
-
-
-
-
-
-
-
-

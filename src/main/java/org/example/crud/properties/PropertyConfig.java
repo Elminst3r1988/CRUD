@@ -1,5 +1,6 @@
 package org.example.crud.properties;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,4 +21,11 @@ public class PropertyConfig {
     private String currateApiKey;
     private String adminPass;
 
+    @PostConstruct
+    public void init() {
+        System.out.println("OpenExchangeApiKey: " + openExchangeApiKey);
+        System.out.println("CurrencyApiKey: " + currencyApiKey);
+        System.out.println("CurrateApiKey: " + currateApiKey);
+        System.out.println("AdminPass: " + adminPass);
+    }
 }
